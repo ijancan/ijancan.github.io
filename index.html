@@ -1,23 +1,135 @@
----
-layout: default
----
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            body {
+                background-color: aliceblue;
+            }
+            #jumbotron {
+                background: url(thumbs_clouds-sky-header-2065-1024x300.jpg);
+                background-size: 100% 100%;
+                
+            }
+            
+            
+        </style>
+    </head>
+    
+    
+    <body>
+    
+    <div class="row">
+  
+  <div class="jumbotron" id="jumbotron"> <h1 class="text-center">The Local Weather</h1>
+    
+  </div>
+  </div>
+  
+  <div class="row col-md-offset-5" id="weather">
+    <div class="col-md-4 panel panel-default panel-body">
+        <div class="row"><strong>The temperature is:</strong></div>
+        <div class="row" id="temperature"> </div>
+        <div class="row" id="CF">
+            <form>
+                <input type="radio" name="scale" value="Celsius"> <strong>Celsius</strong>
+                <input type="radio" name="scale" value="Fahrenheit"><strong>Fahrenheit</strong>
+            </form>
+        </div>
+        <div class="row" id="humidity"><strong>The humidity is:</strong> </div>
+        <div class="row" id="description"></div>
+        <div class="row" id="icon"></div>
+    </div>
+  </div>
+  
 
-<div class="home">
-
-  <h1 class="page-heading">Posts</h1>
-
-  <ul class="post-list">
-    {% for post in site.posts %}
-      <li>
-        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
-
-        <h2>
-          <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
-        </h2>
-      </li>
-    {% endfor %}
-  </ul>
-
-  <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
-
+<div class="row col-md-offset-5">
+  <form> 
+    <label for="zip"> Please enter your zip code.</label>
+      <input type="text" name="zip" id="zip">
+      <button class="btn btn-primary" type="submit" id="GetWeather">Get Weather! <span class="glyphicon glyphicon-sunglasses"></span></button>
+    </form>
 </div>
+    
+    
+    </body>
+
+    
+    <script
+  src="https://code.jquery.com/jquery-3.1.1.js"
+  integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
+  crossorigin="anonymous"></script>
+    
+    <script>
+    $(document).ready(function(){
+        console.log("Document is ready!");
+        $('#GetWeather').click(function(){
+            event.preventDefault();
+            var zip = document.getElementById('zip').value;
+            console.log(zip);
+            $.get("http://api.openweathermap.org/data/2.5/weather?zip="+ zip+",us&APPID=56b0e8ef9335b0aeb6e29acadfaaa3b2&units=imperial", function(data){
+      
+                var temp = data.main.temp;
+                var icon = data.weather[0].icon;
+                var imgSrc = "http://openweathermap.org/img/w/" + icon + ".png";
+                console.log(temp);
+                var humidity = data.main.humidity;
+                $("input[type=radio]").click(function(){
+                    if ($("input[type=radio][value='Celsius']").is(":checked")){
+                       var tempchange = Math.round((data.main.temp - 32) * 5/9).toFixed(2);
+                        var celsius = "&#8451;"
+                    }
+                    
+                    else {
+                         var tempchange = data.main.temp;
+                        var celsius = "&#8457;"
+                    }
+                    console.log(tempchange);
+                    $("#temperature").empty().append('<p>'+ tempchange + celsius + ' </p>');
+                    
+                });
+                
+                console.log(humidity);
+                var desc = data.weather[0].description;
+                console.log(desc);
+                $("#temperature").append('<p>'+ temp +'&#8457; </p>');
+                $("#humidity").append('<p>'+ humidity +'% </p>');
+                $("#description").html(desc);
+                $("#icon").append("<img class='weatherImg' src='"+ imgSrc + "' style='height: 250px; width: 250px;'>");
+                
+                
+   
+            /* Must run chrome.exe --user-data-dir="C:/Chrome dev session" --disable-web-security */
+        }); 
+    
+  
+});
+    });
+    
+    
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</html>
