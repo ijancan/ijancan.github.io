@@ -68,7 +68,7 @@
             event.preventDefault();
             var zip = document.getElementById('zip').value;
             console.log(zip);
-            $.get("https://api.openweathermap.org/data/2.5/weather?zip="+ zip+",us&APPID=56b0e8ef9335b0aeb6e29acadfaaa3b2&units=imperial", function(data){
+            $.get("https://www.api.openweathermap.org/data/2.5/weather?zip="+ zip+",us&APPID=56b0e8ef9335b0aeb6e29acadfaaa3b2&units=imperial", function(data){
       
                 var temp = data.main.temp;
                 var icon = data.weather[0].icon;
